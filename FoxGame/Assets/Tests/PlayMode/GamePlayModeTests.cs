@@ -98,6 +98,8 @@ public class GamePlayModeTests
         Assert.IsFalse(Result.IsVisible, $"{when}: 결과 화면이 숨겨져야 함");
         Assert.Less(new Vector2(p.x - start.x, p.z - start.z).magnitude, 0.1f, $"{when}: 여우가 시작 위치에 있어야 함 {p}");
         Assert.IsTrue(Fox.InputEnabled, $"{when}: 조작 가능해야 함");
+        foreach (var t in UnityEngine.Object.FindObjectsByType<CrumblingTile>(FindObjectsSortMode.None))
+            Assert.AreEqual(TileState.Solid, t.State, $"{when}: 타일 {t.Cell} 복구");
     }
 
     // ── 테스트 ──────────────────────────────────────────────────────
@@ -174,6 +176,32 @@ public class GamePlayModeTests
         yield return Press(Key.R);
         yield return WaitForReload(old);
         AssertFreshGame("플레이 중 R 후");
+    }
+
+    static CrumblingTile StartTile => UnityEngine.Object.FindFirstObjectByType<TileCrumbler>().GetTile(0, 0);
+
+    [UnityTest]
+    public IEnumerator 제자리에서는_바닥_유지()
+    {
+        yield return new WaitForSeconds(1.5f);
+        yield return Press(Key.Space);
+        yield return WaitFor(() => Fox.IsGrounded, 2f, "착지");
+        yield return new WaitForSeconds(1.5f);
+        Assert.AreEqual(TileState.Solid, StartTile.State, "가만히 있거나 제자리 점프하면 발밑 타일은 그대로");
+        Assert.AreEqual(GameState.Playing, Game.State);
+    }
+
+    [UnityTest]
+    public IEnumerator 지나간_바닥은_흔들리다_1초_뒤_떨어짐()
+    {
+        var tile = StartTile;
+        yield return Hold(Key.W, 0.6f); // (0,1)로 옮기면 시작 타일이 흔들림
+        Assert.AreEqual(TileState.Shaking, tile.State, "떠난 타일은 흔들림");
+        yield return WaitFor(() => tile.State != TileState.Shaking, 1.5f, "흔들림 끝");
+        Assert.AreEqual(TileState.Falling, tile.State, "1초 뒤 떨어짐");
+        foreach (var c in tile.GetComponentsInChildren<Collider>()) Assert.IsFalse(c.enabled, "떨어지는 타일은 밟을 수 없음");
+        yield return WaitFor(() => !tile.gameObject.activeSelf, 3f, "떨어진 타일 사라짐");
+        Assert.AreEqual(GameState.Playing, Game.State, "여우는 다음 타일에 있어 안전");
     }
 
     [UnityTest]

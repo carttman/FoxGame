@@ -65,7 +65,7 @@ public static class LevelBuilder
                 MakeBlock("Grass", tile, new Vector3(0f, -0.1f, 0f), new Vector3(size, 0.2f, size),
                           (x + z) % 2 == 0 ? grassA : grassB);
                 MakeBlock("Dirt", tile, new Vector3(0f, -0.6f, 0f), new Vector3(size, 0.8f, size), dirt);
-                GameObjectUtility.SetStaticEditorFlags(tile.gameObject, StaticEditorFlags.BatchingStatic);
+                // 정적 배칭은 쓰지 않는다: 8단계에서 타일이 무너져 움직인다
             }
         }
 
@@ -87,6 +87,8 @@ public static class LevelBuilder
         var so = new SerializedObject(fox.GetComponent<FoxController>());
         so.FindProperty("cameraTransform").objectReferenceValue = cam.transform;
         so.ApplyModifiedPropertiesWithoutUndo();
+
+        CrumbleSetup.ApplyTo(map); // 8단계: 지나간 타일이 무너지게
 
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);

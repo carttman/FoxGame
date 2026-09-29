@@ -13,6 +13,9 @@ PC 브라우저(Chrome · Edge 등)에서 설치 없이 실행됩니다. 처음 
 - 체리 5개를 모두 모으면 **CLEAR!**
 - 구멍이나 맵 밖으로 떨어지면 **GAME OVER**
 - 구멍 위 공중에 떠 있는 체리(빛기둥 표시)는 점프해야 먹을 수 있습니다
+- **여우가 지나간 바닥은 흔들리다가 1초 뒤에 떨어집니다.** 한 번 지나간 길로는 돌아갈 수 없으니 순서를 생각하세요 (가만히 있거나 제자리 점프는 괜찮아요)
+
+![무너지는 바닥](FoxGame/Captures/step8_crumble.png)
 
 | 키 | 동작 |
 |---|---|
@@ -39,7 +42,7 @@ Unity 에디터:
 | 폴더 | 내용 |
 |---|---|
 | `Blender/` | 복셀 모델 생성 스크립트 (`make_fox.py`, `make_cherry.py`) 와 결과물(.blend / .fbx) |
-| `FoxGame/Assets/Scripts/` | 게임 코드 — 이동·점프, 부위 회전 애니메이션, 아이템, 게임 상태, HUD, 결과 화면 |
+| `FoxGame/Assets/Scripts/` | 게임 코드 — 이동·점프, 부위 회전 애니메이션, 아이템, 게임 상태, HUD, 결과 화면, 무너지는 바닥 |
 | `FoxGame/Assets/Editor/` | 단계별 씬 셋업·검증 스크립트 (메뉴 **Tools > Fox**) |
 | `FoxGame/Assets/Tests/PlayMode/` | Play 모드 테스트 (가상 키보드로 실제 게임 루프 확인) |
 | `개발계획서.md` / `.html` | 단계별 개발 계획과 진행 기록 |
@@ -58,8 +61,8 @@ blender -b -P Blender/make_cherry.py
 
 ## 검증
 
-- **Tools > Fox > 전체 검증**: 편집 모드 시뮬레이션 21건 (이동, 점프, 애니메이션, 아이템, 게임 결과)
-- **Window > General > Test Runner > PlayMode > Run All**: Play 모드 테스트 7건 (키 입력, 게임 오버, 재시작)
+- **Tools > Fox > 전체 검증**: 편집 모드 시뮬레이션 27건 (이동, 점프, 애니메이션, 아이템, 게임 결과, 무너지는 바닥)
+- **Window > General > Test Runner > PlayMode > Run All**: Play 모드 테스트 9건 (키 입력, 게임 오버, 재시작, 무너지는 바닥)
 
 ## 사용 도구
 

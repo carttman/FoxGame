@@ -95,7 +95,7 @@
     <p class="sub">Unity 3D 개발 계획서 · 2026-09-29</p>
     <div class="progress">
       <div class="bar"><span style="width: 100%"></span></div>
-      <small>7단계 모두 완료 🎉</small>
+      <small>7단계 모두 완료 🎉 + 추가 기능: 무너지는 바닥</small>
     </div>
     <p class="sub" style="margin-top:10px">▶ <a href="https://carttman.github.io/FoxGame/"><b>브라우저에서 바로 하기</b></a> · carttman.github.io/FoxGame</p>
   </div>
@@ -123,6 +123,7 @@
     <li class="done"><span class="num">5</span><div class="body"><div class="title">아이템 추가</div><div class="note">복셀 체리 5개 · 공중 1개(빛기둥 표시) · HUD 카운터 · 검증 4건 통과</div></div><span class="badge">완료</span></li>
     <li class="done"><span class="num">6</span><div class="body"><div class="title">낙하 시 게임 종료, 전부 획득 시 성공</div><div class="note">GAME OVER / CLEAR! 결과 화면 · 조작 잠금 · 전체 검증 21건 통과</div></div><span class="badge">완료</span></li>
     <li class="done"><span class="num">7</span><div class="body"><div class="title">재시작</div><div class="note">R 키 · [다시 하기] 버튼 · Enter · Play 모드 테스트 7건 통과</div></div><span class="badge">완료</span></li>
+    <li class="done"><span class="num">8</span><div class="body"><div class="title">(추가) 무너지는 바닥</div><div class="note">지나간 타일이 흔들리다 1초 뒤 낙하 · 검증 6건 + Play 모드 2건 통과</div></div><span class="badge">완료</span></li>
   </ol>
 </section>
 
@@ -289,10 +290,40 @@
       <tr><td>게임 오버 → <kbd>Enter</kbd></td><td>✅</td></tr>
       <tr><td>플레이 중 <kbd>R</kbd></td><td>✅</td></tr>
       <tr><td>클리어 → <kbd>R</kbd> → 체리 5개 복구</td><td>✅</td></tr>
-      <tr><td><b>전체</b></td><td><b>✅ Play 모드 7/7 · 편집 모드 21/21</b></td></tr>
+      <tr><td><b>전체</b></td><td><b>✅ Play 모드 9/9 · 편집 모드 27/27 (8단계 포함)</b></td></tr>
     </table>
   </div>
   <p class="sub" style="margin-top:10px">Play 모드 테스트로 찾은 버그: fps가 아주 높으면 한 프레임 이동량이 CharacterController의 최소 이동 거리(0.001m)보다 작아 여우가 멈췄습니다. 최소 이동 거리를 0으로 고쳤습니다.</p>
+</section>
+
+<section>
+  <h2>무너지는 바닥 (8단계 · 추가 기능)</h2>
+  <p class="sub">여우가 지나간 바닥은 흔들리다가 1초 뒤에 떨어집니다. 한 번 지나간 길은 다시 쓸 수 없어 경로를 생각해야 합니다.</p>
+  <div class="kv" style="margin-top:12px">
+    <div><b>무너지는 때</b>여우가 다른 타일에 올라서는 순간, 방금 떠난 타일이 흔들리기 시작</div>
+    <div><b>안전한 때</b>가만히 서 있기 · 제자리 점프 (시작 타일도 움직이기 전까지 안전)</div>
+    <div><b>흔들림 → 낙하</b>1초 동안 좌우로 떨림(0.03 → 0.08m) → 발판 판정 꺼지고 기울며 낙하 → 2초 뒤 사라짐</div>
+    <div><b>되돌아가기</b>흔들리는 타일에 서 있으면 함께 떨어져 GAME OVER · 재시작하면 모두 복구</div>
+    <div><b>코드</b><code>CrumblingTile</code>(타일 상태) · <code>TileCrumbler</code>(여우 발밑 추적) · 정적 배칭 끔</div>
+    <div><b>셋업</b><b>Tools &gt; Fox &gt; 8단계 무너지는 바닥</b></div>
+  </div>
+<pre style="margin-top:14px">(0,0) → (0,1) → (0,2) → (0,3) 체리 → (1,3)
+  → 남쪽 점프: (1,2) 공중 체리 → (1,1) 착지
+  → (2,1) → (3,1) 체리 → (3,0) 체리
+  → 북쪽 점프: 흔들리는 (3,1)을 넘어 (3,2) → (3,3) 체리 → CLEAR!</pre>
+  <h3>검증 결과</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>시나리오</th><th>결과</th></tr>
+      <tr><td>가만히 2초 + 제자리 점프 2번</td><td>✅ 시작 타일 그대로</td></tr>
+      <tr><td>떠난 타일 흔들림</td><td>✅ 최대 0.087m, 높이 변화 0m</td></tr>
+      <tr><td>1초 뒤 떨어짐</td><td>✅ 1.00초, 발판 판정 꺼짐</td></tr>
+      <tr><td>떨어진 뒤 사라짐</td><td>✅ 여우는 안전</td></tr>
+      <tr><td>흔들리는 타일로 되돌아가기</td><td>✅ 함께 떨어져 GAME OVER</td></tr>
+      <tr><td>무너지는 바닥으로 전체 코스</td><td>✅ CLEAR!, 체리 5/5, 무너진 타일 10개</td></tr>
+      <tr><td>Play 모드 2건 · WebGL 브라우저 확인</td><td>✅</td></tr>
+    </table>
+  </div>
 </section>
 
 <section>
@@ -326,7 +357,7 @@
     <li><code>Assets/Scenes/FoxGame.unity</code> 열기 → <b>Play</b></li>
     <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 이동 · <kbd>Space</kbd> 점프 · 체리 5개 모으면 클리어 · <kbd>R</kbd> 재시작</li>
   </ol>
-  <p class="sub">검증: <b>Tools &gt; Fox &gt; 전체 검증</b> (편집 모드 21건) · <b>Window &gt; General &gt; Test Runner &gt; PlayMode &gt; Run All</b> (Play 모드 7건)</p>
+  <p class="sub">검증: <b>Tools &gt; Fox &gt; 전체 검증</b> (편집 모드 27건) · <b>Window &gt; General &gt; Test Runner &gt; PlayMode &gt; Run All</b> (Play 모드 9건)</p>
   <p class="sub">바로 하기: <a href="https://carttman.github.io/FoxGame/">carttman.github.io/FoxGame</a></p>
   <p class="sub">로컬 웹 미리보기:<b>Tools &gt; Fox &gt; WebGL 빌드</b> → <code>powershell -ExecutionPolicy Bypass -File FoxGame/Tools/serve-webgl.ps1</code> → <code>http://localhost:8080</code></p>
 </section>
@@ -358,7 +389,9 @@
       <tr><td><code>e6836b8</code></td><td>URP 템플릿 샘플 파일 삭제, 문서 경로를 D:\FoxGame으로 수정</td></tr>
       <tr><td><code>56b5239</code></td><td>WebGL 미리보기: 빌드 메뉴, 로컬 서버, 한글 폰트 포함, Mobile 품질 그림자 수정</td></tr>
       <tr><td><code>462ebdf</code></td><td>(gh-pages 브랜치) WebGL 빌드 게시</td></tr>
-      <tr><td>(이번 커밋)</td><td>README · 계획서에 GitHub Pages 링크 추가</td></tr>
+      <tr><td><code>a8f5c97</code></td><td>README · 계획서에 GitHub Pages 링크 추가</td></tr>
+      <tr><td><code>05ac3ae</code></td><td>(gh-pages 브랜치) WebGL 빌드: 무너지는 바닥</td></tr>
+      <tr><td>(이번 커밋)</td><td>8단계 무너지는 바닥: 지나간 타일이 흔들리다 1초 뒤 낙하</td></tr>
     </table>
   </div>
 </section>
@@ -408,13 +441,13 @@
 │   └─ fox_preview.png, cherry_preview.png
 └─ FoxGame\              Unity 프로젝트
     ├─ Assets\Editor\     FoxSetup.cs, LevelBuilder.cs, AnimationSetup.cs, ItemSetup.cs,
-    │                     ResultSetup.cs, RestartSetup.cs, VerifyAll.cs, WebGLBuild.cs
+    │                     ResultSetup.cs, RestartSetup.cs, CrumbleSetup.cs, VerifyAll.cs, WebGLBuild.cs
     ├─ Assets\Scripts\    FoxGame.asmdef, LevelLayout.cs, FoxController.cs, FoxAnimator.cs,
     │                     BlobShadow.cs, Item.cs, ItemCollector.cs, GameManager.cs, GameHUD.cs,
-    │                     ResultScreen.cs
+    │                     ResultScreen.cs, CrumblingTile.cs, TileCrumbler.cs
     ├─ Assets\Resources\Fonts\  NotoSansKR.ttf (+ 라이선스) 결과 화면 한글 폰트
     ├─ Assets\Settings\   URP 설정 (PC / Mobile, WebGL은 Mobile 사용)
-    ├─ Assets\Tests\PlayMode\  GamePlayModeTests.cs (Play 모드 테스트 7건)
+    ├─ Assets\Tests\PlayMode\  GamePlayModeTests.cs (Play 모드 테스트 9건)
     ├─ Assets\Materials\  타일·그림자·빛기둥 머티리얼
     ├─ Assets\Models\     fox_voxel.fbx, cherry_voxel.fbx, Materials\
     ├─ Assets\Prefabs\    Fox.prefab, Cherry.prefab
