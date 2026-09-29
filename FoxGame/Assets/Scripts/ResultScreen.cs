@@ -72,12 +72,13 @@ public class ResultScreen : MonoBehaviour
         if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(retryButton.gameObject);
     }
 
-    // 기본 폰트에는 한글이 없어서 OS 폰트를 쓴다
+    // 기본 폰트에는 한글이 없어서 포함된 Noto Sans KR을 쓴다 (WebGL은 OS 폰트를 못 씀). 없으면 OS 폰트.
     void EnsureKoreanFont()
     {
         if (fontReady) return;
         fontReady = true;
-        var font = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans CJK KR", "Arial" }, 48);
+        var font = Resources.Load<Font>("Fonts/NotoSansKR");
+        if (font == null) font = Font.CreateDynamicFontFromOSFont(new[] { "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans CJK KR", "Arial" }, 48);
         if (font == null) return;
         detail.font = font;
         retryLabel.font = font;

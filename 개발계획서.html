@@ -295,6 +295,29 @@
 </section>
 
 <section>
+  <h2>WebGL 미리보기</h2>
+  <div class="kv">
+    <div><b>빌드</b><b>Tools &gt; Fox &gt; WebGL 빌드</b> → <code>FoxGame/Builds/WebGL</code> (Git 제외, 압축 끔)</div>
+    <div><b>필요 모듈</b>6000.3.10f1 + WebGL Build Support</div>
+    <div><b>로컬 서버</b><code>FoxGame/Tools/serve-webgl.ps1</code> → <code>http://localhost:8080</code></div>
+    <div><b>한글 폰트</b>Noto Sans KR(OFL)을 <code>Assets/Resources/Fonts/</code>에 포함 (WebGL은 OS 폰트 못 씀)</div>
+  </div>
+  <h3>WebGL에서 찾은 문제</h3>
+  <p class="sub">타일 · 여우 · 체리(URP Lit)가 안 보이고 반투명 그림자 · 빛기둥만 보였습니다. WebGL은 <b>Mobile</b> 품질을 쓰는데 추가 조명 그림자가 꺼져 있어, Lit 셰이더의 그림자 샘플러(<code>_AdditionalLightsShadowmapTexture</code>) 자리에 일반 컬러 텍스처가 묶여 WebGL2가 그리기를 거부했습니다. <code>Mobile_RPAsset</code>의 Additional Lights &gt; Cast Shadows를 켜서 고쳤습니다.</p>
+  <h3>WebGL 확인 결과 (Chrome 152, ANGLE D3D11)</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>시나리오</th><th>결과</th></tr>
+      <tr><td>화면 (타일 · 여우 · 체리 · 빛기둥 · HUD)</td><td>✅ GL 오류 0건</td></tr>
+      <tr><td><kbd>W</kbd> 이동 → 체리 먹기</td><td>✅ HUD 1 / 5</td></tr>
+      <tr><td><kbd>Space</kbd> 점프</td><td>✅ 제자리 착지</td></tr>
+      <tr><td>구멍 낙하 → GAME OVER (한글 문구)</td><td>✅</td></tr>
+      <tr><td><kbd>R</kbd> 재시작</td><td>✅</td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
   <h2>실행 방법</h2>
   <ol>
     <li>Unity Hub → <b>Add</b> → <code>D:\FoxGame\FoxGame</code> 선택 (Unity 6000.3.10f1)</li>
@@ -302,6 +325,7 @@
     <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 이동 · <kbd>Space</kbd> 점프 · 체리 5개 모으면 클리어 · <kbd>R</kbd> 재시작</li>
   </ol>
   <p class="sub">검증: <b>Tools &gt; Fox &gt; 전체 검증</b> (편집 모드 21건) · <b>Window &gt; General &gt; Test Runner &gt; PlayMode &gt; Run All</b> (Play 모드 7건)</p>
+  <p class="sub">웹 미리보기: <b>Tools &gt; Fox &gt; WebGL 빌드</b> → <code>powershell -ExecutionPolicy Bypass -File FoxGame/Tools/serve-webgl.ps1</code> → <code>http://localhost:8080</code></p>
 </section>
 
 <section>
@@ -327,7 +351,8 @@
       <tr><td><code>073d302</code></td><td>(GitHub에서 생성) Initial commit — Unity .gitignore 템플릿</td></tr>
       <tr><td><code>601c269</code></td><td>원격 Initial commit 병합, .gitignore를 FoxGame/ 기준으로 통합</td></tr>
       <tr><td><code>7d4db7f</code></td><td>개발계획서에 Git 저장소 정보 추가</td></tr>
-      <tr><td>(이번 커밋)</td><td>URP 템플릿 샘플 파일 삭제, 문서 경로를 D:\FoxGame으로 수정</td></tr>
+      <tr><td><code>e6836b8</code></td><td>URP 템플릿 샘플 파일 삭제, 문서 경로를 D:\FoxGame으로 수정</td></tr>
+      <tr><td>(이번 커밋)</td><td>WebGL 미리보기: 빌드 메뉴, 로컬 서버, 한글 폰트 포함, Mobile 품질 그림자 수정</td></tr>
     </table>
   </div>
 </section>
@@ -377,16 +402,20 @@
 │   └─ fox_preview.png, cherry_preview.png
 └─ FoxGame\              Unity 프로젝트
     ├─ Assets\Editor\     FoxSetup.cs, LevelBuilder.cs, AnimationSetup.cs, ItemSetup.cs,
-    │                     ResultSetup.cs, RestartSetup.cs, VerifyAll.cs
+    │                     ResultSetup.cs, RestartSetup.cs, VerifyAll.cs, WebGLBuild.cs
     ├─ Assets\Scripts\    FoxGame.asmdef, LevelLayout.cs, FoxController.cs, FoxAnimator.cs,
     │                     BlobShadow.cs, Item.cs, ItemCollector.cs, GameManager.cs, GameHUD.cs,
     │                     ResultScreen.cs
+    ├─ Assets\Resources\Fonts\  NotoSansKR.ttf (+ 라이선스) 결과 화면 한글 폰트
+    ├─ Assets\Settings\   URP 설정 (PC / Mobile, WebGL은 Mobile 사용)
     ├─ Assets\Tests\PlayMode\  GamePlayModeTests.cs (Play 모드 테스트 7건)
     ├─ Assets\Materials\  타일·그림자·빛기둥 머티리얼
     ├─ Assets\Models\     fox_voxel.fbx, cherry_voxel.fbx, Materials\
     ├─ Assets\Prefabs\    Fox.prefab, Cherry.prefab
     ├─ Assets\UI\         cherry_icon.png
     ├─ Assets\Scenes\     FoxGame.unity
+    ├─ Tools\             serve-webgl.ps1 (WebGL 로컬 서버)
+    ├─ Builds\WebGL\      WebGL 빌드 결과 (Git 제외)
     └─ Captures\          단계별 확인 캡처</pre>
 </section>
 
