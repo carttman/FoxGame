@@ -1,5 +1,9 @@
+# Unity 프로젝트가 저장소 하위 폴더(FoxGame/)에 있으므로 Unity 규칙은 FoxGame/ 기준으로 둔다.
+# 기반: https://github.com/github/gitignore/blob/main/Unity.gitignore
+
 # ── Unity (FoxGame) ─────────────────────────────
 # Unity가 자동으로 다시 만드는 폴더
+FoxGame/.utmp/
 FoxGame/[Ll]ibrary/
 FoxGame/[Tt]emp/
 FoxGame/[Oo]bj/
@@ -7,29 +11,57 @@ FoxGame/[Ll]ogs/
 FoxGame/[Uu]ser[Ss]ettings/
 FoxGame/[Bb]uild/
 FoxGame/[Bb]uilds/
+*.log
+
+# 용량이 크고 민감한 정보가 들어갈 수 있는 캡처
 FoxGame/[Mm]emoryCaptures/
 FoxGame/[Rr]ecordings/
 
-# IDE가 만드는 프로젝트 파일
-FoxGame/*.csproj
-FoxGame/*.sln
-FoxGame/*.slnx
-FoxGame/*.suo
-FoxGame/*.user
-FoxGame/*.pidb
-FoxGame/*.booproj
-FoxGame/*.unityproj
+# 자동 생성되는 Rider 플러그인
+FoxGame/[Aa]ssets/Plugins/Editor/JetBrains*
+
+# IDE / 캐시
 .vs/
 .vscode/
 .idea/
+.gradle/
+ExportedObj/
+.consulo/
+
+# IDE가 만드는 프로젝트 파일
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
 
 # 빌드 산출물 / 크래시 로그
 *.apk
 *.aab
 *.unitypackage
+*.unitypackage.meta
+*.app
 sysinfo.txt
 crashlytics-build.properties
 mono_crash.*
+
+# Addressables / Android 임시 에셋
+FoxGame/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+FoxGame/[Aa]ssets/[Ss]treamingAssets/aa.meta
+FoxGame/[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # ── Blender ─────────────────────────────────────
 *.blend1
