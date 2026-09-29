@@ -72,6 +72,8 @@
   .colors { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
   .colors span { display: inline-flex; align-items: center; gap: 6px; font-size: .85rem; }
   .colors i { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--line); }
+  a { color: var(--accent); }
+  code { font-size: .9em; background: var(--bg); border-radius: 4px; padding: 1px 5px; }
   .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
   .shots figure { margin: 0; }
   .shots img { width: 100%; border-radius: 10px; display: block; }
@@ -303,6 +305,32 @@
 </section>
 
 <section>
+  <h2>Git 저장소</h2>
+  <div class="kv">
+    <div><b>원격 저장소</b><a href="https://github.com/carttman/FoxGame">github.com/carttman/FoxGame</a> (Public)</div>
+    <div><b>브랜치</b><code>main</code> ↔ <code>origin/main</code></div>
+    <div><b>저장소 범위</b><code>D:\t</code> 전체 (계획서 · Blender · FoxGame)</div>
+    <div><b>Git</b>GitHub Desktop 내장 git (PATH에 없음)</div>
+  </div>
+  <pre style="margin-top:14px">git clone https://github.com/carttman/FoxGame.git</pre>
+  <ul class="sub" style="margin:12px 0 0; padding-left:20px">
+    <li><code>.gitignore</code>: GitHub Unity 템플릿을 <code>FoxGame/</code> 하위 폴더 기준으로 옮겨 적용 (Library · Temp · Logs · csproj 등 제외)</li>
+    <li><code>.gitattributes</code>: Unity YAML 에셋은 LF 고정, fbx · blend · png는 바이너리</li>
+    <li>용량이 작아(약 4MB) Git LFS는 쓰지 않음 · 인증은 Git Credential Manager</li>
+  </ul>
+  <h3>커밋 기록</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>커밋</th><th>내용</th></tr>
+      <tr><td><code>07bd146</code></td><td>여우 복셀 3D 게임: 1~7단계 구현</td></tr>
+      <tr><td><code>f65fe13</code></td><td>README 추가</td></tr>
+      <tr><td><code>073d302</code></td><td>(GitHub에서 생성) Initial commit — Unity .gitignore 템플릿</td></tr>
+      <tr><td><code>601c269</code></td><td>원격 Initial commit 병합, .gitignore를 FoxGame/ 기준으로 통합</td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
   <h2>조작</h2>
   <div class="table-wrap">
     <table>
@@ -335,6 +363,7 @@
     <div><b>입력</b>Unity Input System</div>
   </div>
 <pre>D:\t
+├─ .gitignore / .gitattributes / README.md   Git 설정과 저장소 소개
 ├─ Blueprint.md          원본 메모
 ├─ 개발계획서.md          계획서
 ├─ 개발계획서.html        이 문서
