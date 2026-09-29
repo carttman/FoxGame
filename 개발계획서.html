@@ -97,6 +97,7 @@
       <div class="bar"><span style="width: 100%"></span></div>
       <small>7단계 모두 완료 🎉</small>
     </div>
+    <p class="sub" style="margin-top:10px">▶ <a href="https://carttman.github.io/FoxGame/"><b>브라우저에서 바로 하기</b></a> · carttman.github.io/FoxGame</p>
   </div>
 </header>
 
@@ -297,6 +298,7 @@
 <section>
   <h2>WebGL 미리보기</h2>
   <div class="kv">
+    <div><b>공개 주소</b><a href="https://carttman.github.io/FoxGame/">carttman.github.io/FoxGame</a> (GitHub Pages, <code>gh-pages</code> 브랜치 · 다시 빌드하면 다시 올려야 갱신)</div>
     <div><b>빌드</b><b>Tools &gt; Fox &gt; WebGL 빌드</b> → <code>FoxGame/Builds/WebGL</code> (Git 제외, 압축 끔)</div>
     <div><b>필요 모듈</b>6000.3.10f1 + WebGL Build Support</div>
     <div><b>로컬 서버</b><code>FoxGame/Tools/serve-webgl.ps1</code> → <code>http://localhost:8080</code></div>
@@ -325,14 +327,16 @@
     <li><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 이동 · <kbd>Space</kbd> 점프 · 체리 5개 모으면 클리어 · <kbd>R</kbd> 재시작</li>
   </ol>
   <p class="sub">검증: <b>Tools &gt; Fox &gt; 전체 검증</b> (편집 모드 21건) · <b>Window &gt; General &gt; Test Runner &gt; PlayMode &gt; Run All</b> (Play 모드 7건)</p>
-  <p class="sub">웹 미리보기: <b>Tools &gt; Fox &gt; WebGL 빌드</b> → <code>powershell -ExecutionPolicy Bypass -File FoxGame/Tools/serve-webgl.ps1</code> → <code>http://localhost:8080</code></p>
+  <p class="sub">바로 하기: <a href="https://carttman.github.io/FoxGame/">carttman.github.io/FoxGame</a></p>
+  <p class="sub">로컬 웹 미리보기:<b>Tools &gt; Fox &gt; WebGL 빌드</b> → <code>powershell -ExecutionPolicy Bypass -File FoxGame/Tools/serve-webgl.ps1</code> → <code>http://localhost:8080</code></p>
 </section>
 
 <section>
   <h2>Git 저장소</h2>
   <div class="kv">
     <div><b>원격 저장소</b><a href="https://github.com/carttman/FoxGame">github.com/carttman/FoxGame</a> (Public)</div>
-    <div><b>브랜치</b><code>main</code> ↔ <code>origin/main</code></div>
+    <div><b>브랜치</b><code>main</code> ↔ <code>origin/main</code> · <code>gh-pages</code> (WebGL 빌드 게시용)</div>
+    <div><b>웹 게임</b><a href="https://carttman.github.io/FoxGame/">carttman.github.io/FoxGame</a></div>
     <div><b>저장소 범위</b><code>D:\FoxGame</code> 전체 (계획서 · Blender · FoxGame)</div>
     <div><b>Git</b>GitHub Desktop 내장 git (PATH에 없음)</div>
   </div>
@@ -352,7 +356,9 @@
       <tr><td><code>601c269</code></td><td>원격 Initial commit 병합, .gitignore를 FoxGame/ 기준으로 통합</td></tr>
       <tr><td><code>7d4db7f</code></td><td>개발계획서에 Git 저장소 정보 추가</td></tr>
       <tr><td><code>e6836b8</code></td><td>URP 템플릿 샘플 파일 삭제, 문서 경로를 D:\FoxGame으로 수정</td></tr>
-      <tr><td>(이번 커밋)</td><td>WebGL 미리보기: 빌드 메뉴, 로컬 서버, 한글 폰트 포함, Mobile 품질 그림자 수정</td></tr>
+      <tr><td><code>56b5239</code></td><td>WebGL 미리보기: 빌드 메뉴, 로컬 서버, 한글 폰트 포함, Mobile 품질 그림자 수정</td></tr>
+      <tr><td><code>462ebdf</code></td><td>(gh-pages 브랜치) WebGL 빌드 게시</td></tr>
+      <tr><td>(이번 커밋)</td><td>README · 계획서에 GitHub Pages 링크 추가</td></tr>
     </table>
   </div>
 </section>

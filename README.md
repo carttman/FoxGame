@@ -2,6 +2,10 @@
 
 Blender로 만든 복셀 여우가 4x4 타일맵을 뛰어다니며 체리 5개를 모으는 Unity 6 캐주얼 게임입니다.
 
+### ▶ [브라우저에서 바로 하기](https://carttman.github.io/FoxGame/)
+
+PC 브라우저(Chrome · Edge 등)에서 설치 없이 실행됩니다. 처음 불러올 때 약 65MB를 받습니다.
+
 ![게임 시작 화면](FoxGame/Captures/step5_start.png)
 
 ## 규칙
@@ -22,6 +26,10 @@ Blender로 만든 복셀 여우가 4x4 타일맵을 뛰어다니며 체리 5개�
 | ![walk](FoxGame/Captures/step4_walk.png) | ![jump](FoxGame/Captures/step4_jump.png) | ![clear](FoxGame/Captures/step6_clear.png) |
 
 ## 실행
+
+웹: <https://carttman.github.io/FoxGame/>
+
+Unity 에디터:
 
 1. [Unity Hub](https://unity.com/download)에서 **Add** → `FoxGame` 폴더 선택 (Unity **6000.3.10f1**)
 2. `Assets/Scenes/FoxGame.unity` 열기 → **Play**
