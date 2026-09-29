@@ -4,7 +4,7 @@ Blender로 만든 복셀 여우가 4x4 타일맵을 뛰어다니며 체리 5개�
 
 ### ▶ [브라우저에서 바로 하기](https://carttman.github.io/FoxGame/)
 
-PC 브라우저(Chrome · Edge 등)에서 설치 없이 실행됩니다. 처음 불러올 때 약 65MB를 받습니다.
+PC 브라우저(Chrome · Edge 등)에서 설치 없이 실행됩니다. 처음 불러올 때 약 13MB를 받습니다.
 
 ![게임 시작 화면](FoxGame/Captures/step5_start.png)
 
@@ -47,6 +47,19 @@ Unity 에디터:
 | `FoxGame/Assets/Tests/PlayMode/` | Play 모드 테스트 (가상 키보드로 실제 게임 루프 확인) |
 | `개발계획서.md` / `.html` | 단계별 개발 계획과 진행 기록 |
 | `이슈기록.md` / `.html` | 개발 중 부딪힌 문제의 원인·해결·재발 방지 |
+| `Art/` | Codex CLI가 그린 게임 그림 (키 아트, 아이콘). 화풍 가이드는 `AGENTS.md` |
+
+### 그림 그리기 (Codex CLI)
+
+[Codex CLI](https://github.com/openai/codex)(`npm install -g @openai/codex`, 로그인 필요)가 `AGENTS.md`의 화풍 가이드를 따라 그림을 만들어 `Art/`에 저장합니다.
+
+```bash
+powershell -ExecutionPolicy Bypass -File Art/codex-draw.ps1 -Name title_bg -Prompt "타이틀 화면 배경: 여우가 체리 타일 위에서 손을 흔듦"
+```
+
+옵션: `-Ref`(참고 캡처, 기본 `FoxGame/Captures/step5_start.png`), `-Size`(비율, 기본 `16:9`)
+
+![Codex가 그린 키 아트](Art/fox_keyart.png)
 
 ### 모델 다시 만들기
 

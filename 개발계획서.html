@@ -331,6 +331,7 @@
   <div class="kv">
     <div><b>공개 주소</b><a href="https://carttman.github.io/FoxGame/">carttman.github.io/FoxGame</a> (GitHub Pages, <code>gh-pages</code> 브랜치 · 다시 빌드하면 다시 올려야 갱신)</div>
     <div><b>빌드</b><b>Tools &gt; Fox &gt; WebGL 빌드</b> → <code>FoxGame/Builds/WebGL</code> (Git 제외, 압축 끔)</div>
+    <div><b>용량</b>62.8MB → <b>37.5MB</b>, 받는 양 21.8MB → <b>13.2MB</b> · 폰트 서브셋(9.9MB → 75KB) · <code>DiskSizeLTO</code> · 코드 제거 High (<a href="이슈기록.html#i12">이슈 #12</a>)</div>
     <div><b>필요 모듈</b>6000.3.10f1 + WebGL Build Support</div>
     <div><b>로컬 서버</b><code>FoxGame/Tools/serve-webgl.ps1</code> → <code>http://localhost:8080</code></div>
     <div><b>한글 폰트</b>Noto Sans KR(OFL)을 <code>Assets/Resources/Fonts/</code>에 포함 (WebGL은 OS 폰트 못 씀)</div>
@@ -393,7 +394,9 @@
       <tr><td><code>05ac3ae</code></td><td>(gh-pages 브랜치) WebGL 빌드: 무너지는 바닥</td></tr>
       <tr><td><code>5d1474b</code></td><td>8단계 무너지는 바닥: 지나간 타일이 흔들리다 1초 뒤 낙하</td></tr>
       <tr><td><code>70647a5</code></td><td>이슈기록.md 추가 (이슈 18건 정리)</td></tr>
-      <tr><td>(이번 커밋)</td><td>이슈기록.html 추가 (상태 필터, 이슈 바로가기)</td></tr>
+      <tr><td><code>86a29ed</code></td><td>이슈기록.html 추가 (상태 필터, 이슈 바로가기)</td></tr>
+      <tr><td><code>d6150de</code></td><td>(gh-pages 브랜치) WebGL 빌드 용량 줄이기 (62.8MB → 37.5MB)</td></tr>
+      <tr><td>(이번 커밋)</td><td>WebGL 용량 줄이기(폰트 서브셋 · LTO · 코드 제거), Codex CLI 그림 그리기(AGENTS.md, Art/), 이슈 #19~22</td></tr>
     </table>
   </div>
 </section>
@@ -436,6 +439,8 @@
 ├─ 개발계획서.md          계획서
 ├─ 개발계획서.html        이 문서
 ├─ 이슈기록.md / .html    개발 중 이슈와 해결 기록
+├─ AGENTS.md             Codex 등 에이전트용 안내 (그림 화풍 가이드)
+├─ Art\                  Codex가 그린 그림 (fox_keyart.png, app_icon.png), codex-draw.ps1
 ├─ Blender\
 │   ├─ voxel_utils.py    복셀 모델 공통 코드
 │   ├─ make_fox.py       여우 생성 스크립트
@@ -457,6 +462,7 @@
     ├─ Assets\UI\         cherry_icon.png
     ├─ Assets\Scenes\     FoxGame.unity
     ├─ Tools\             serve-webgl.ps1 (WebGL 로컬 서버)
+    ├─ FontSource\        NotoSansKR-VF.ttf 원본 (빌드 제외, 서브셋의 재료)
     ├─ Builds\WebGL\      WebGL 빌드 결과 (Git 제외)
     └─ Captures\          단계별 확인 캡처</pre>
 </section>
