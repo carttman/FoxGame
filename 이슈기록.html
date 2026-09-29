@@ -164,7 +164,7 @@
   <dl>
     <dt>증상</dt><dd>마지막 체리가 구멍 위 공중 체리이면, 먹는 순간 클리어 → 조작 잠금 → 수평 이동이 멈춰 여우가 구멍으로 떨어졌습니다.</dd>
     <dt>원인</dt><dd>조작을 잠글 때 공중에서 하던 이동까지 멈췄습니다.</dd>
-    <dt>해결</dt><dd><code>FoxController.InputEnabled</code>가 꺼져도 <b>공중에서는 하던 이동을 이어 가 착지</b>하게 했습니다 (<code>carriedDir</code>). 착지한 뒤에 멈춥니다.</dd>
+    <dt>해결</dt><dd><code>FoxController.InputEnabled</code>가 꺼져도 공중에서는 하던 이동을 이어 가 착지하게 했습니다 (<code>carriedDir</code>). 착지한 뒤에 멈춥니다.</dd>
     <dt>검증</dt><dd>ResultSetup "전부 수집 → 클리어" (여우가 건너편에 착지)</dd>
   </dl>
 </article>
@@ -199,7 +199,7 @@
     <dt>원인</dt><dd>저장소를 <code>D:\t</code>에서 <code>D:\FoxGame</code>으로 옮기면서 옛 폴더와 Unity Hub 항목이 남았습니다. <code>D:\t</code>는 커밋 <code>7d4db7f</code>에 멈춘 별도 복사본이었습니다.</dd>
     <dt>찾은 방법</dt><dd><code>%LOCALAPPDATA%\Unity\Editor\Editor.log</code>의 <code>-projectpath</code> 인수, <code>Win32_Process</code>의 Unity 명령줄</dd>
     <dt>해결</dt><dd>문서 경로를 <code>D:\FoxGame</code>으로 고치고, Unity Hub에서 <code>D:\FoxGame\FoxGame</code>을 열고, <code>D:\t</code>를 휴지통으로 보냈습니다.</dd>
-    <dt>교훈</dt><dd>에디터에서 변경이 안 보이면 <b>에디터가 연 프로젝트 경로부터</b> 확인합니다.</dd>
+    <dt>교훈</dt><dd>에디터에서 변경이 안 보이면 에디터가 연 프로젝트 경로부터 확인합니다.</dd>
   </dl>
 </article>
 
@@ -224,7 +224,7 @@
   <div class="head"><span class="num">#8</span><h3>WebGL에서 결과 화면 한글이 안 보임</h3><span class="cat">빌드</span><span class="badge done">해결</span></div>
   <dl>
     <dt>원인</dt><dd><code>ResultScreen</code>이 <code>Font.CreateDynamicFontFromOSFont</code>로 맑은 고딕을 불러왔는데, 브라우저에서는 OS 폰트를 쓸 수 없습니다. 기본 <code>LegacyRuntime.ttf</code>에는 한글이 없습니다.</dd>
-    <dt>해결</dt><dd>PC에 있던 <b>Noto Sans KR</b>(SIL OFL, 배포 가능)을 <code>Assets/Resources/Fonts/NotoSansKR.ttf</code>에 넣고, <code>Resources.Load</code>로 먼저 쓰게 했습니다. 폰트가 없으면 OS 폰트를 씁니다. 라이선스 파일도 함께 넣었습니다.</dd>
+    <dt>해결</dt><dd>PC에 있던 Noto Sans KR(SIL OFL, 배포 가능)을 <code>Assets/Resources/Fonts/NotoSansKR.ttf</code>에 넣고, <code>Resources.Load</code>로 먼저 쓰게 했습니다. 폰트가 없으면 OS 폰트를 씁니다. 라이선스 파일도 함께 넣었습니다.</dd>
     <dt>주의</dt><dd>맑은 고딕 같은 Windows 폰트는 재배포 라이선스가 없어서 게임에 넣으면 안 됩니다.</dd>
     <dt>비용</dt><dd>폰트 약 10MB가 빌드에 들어갔습니다 → <a href="#i12">#12</a>에서 쓰는 글자만 남긴 서브셋(75KB)으로 바꿨습니다.</dd>
   </dl>
@@ -235,7 +235,7 @@
   <dl>
     <dt>원인</dt><dd>Windows PowerShell 5.1은 BOM 없는 <code>.ps1</code>을 시스템 코드 페이지(CP949)로 읽습니다.</dd>
     <dt>해결</dt><dd><code>FoxGame/Tools/serve-webgl.ps1</code>은 영어(ASCII)만 쓰도록 했습니다.</dd>
-    <dt>교훈</dt><dd><code>.ps1</code>에 한글을 쓰려면 UTF-8 <b>BOM</b>으로 저장하거나 ASCII만 씁니다.</dd>
+    <dt>교훈</dt><dd><code>.ps1</code>에 한글을 쓰려면 UTF-8 BOM으로 저장하거나 ASCII만 씁니다.</dd>
   </dl>
 </article>
 
@@ -258,11 +258,11 @@
       <li><code>hlslcc_zcmp_AdditionalLightsShadowmapTexture</code>가 <code>sampler2DShadow</code>인데, 묶인 텍스처는 16×16 <code>SRGB8_ALPHA8</code>이었고 비교 모드도 꺼져 있었습니다.</li>
       <li>그 자리에 메인 그림자 맵(깊이 텍스처)을 임시로 넣어 보니 오류 0건에 화면이 정상이 됐습니다 → 원인 확정.</li>
     </ul></dd>
-    <dt>원인</dt><dd>WebGL은 <b>Mobile</b> 품질(<code>Mobile_RPAsset</code>)을 씁니다. 이 설정은 추가 조명 그림자가 꺼져 있어서, URP가 추가 조명 그림자 맵 자리에 일반 컬러 텍스처를 묶었습니다. 그런데 Lit 셰이더는 여전히 그 텍스처를 그림자 샘플러로 읽습니다. WebGL2는 형식이 맞지 않으면 그리기를 거부합니다. 에디터(PC 품질, D3D11)에서는 드러나지 않았습니다.</dd>
+    <dt>원인</dt><dd>WebGL은 Mobile 품질(<code>Mobile_RPAsset</code>)을 씁니다. 이 설정은 추가 조명 그림자가 꺼져 있어서, URP가 추가 조명 그림자 맵 자리에 일반 컬러 텍스처를 묶었습니다. 그런데 Lit 셰이더는 여전히 그 텍스처를 그림자 샘플러로 읽습니다. WebGL2는 형식이 맞지 않으면 그리기를 거부합니다. 에디터(PC 품질, D3D11)에서는 드러나지 않았습니다.</dd>
     <dt>해결</dt><dd><code>Mobile_RPAsset</code>의 <code>m_AdditionalLightShadowsSupported: 1</code>. 추가 조명이 없어 비용은 거의 없습니다.</dd>
     <dt>교훈</dt><dd><ul>
       <li>플랫폼마다 쓰는 품질 설정이 다릅니다 (<code>QualitySettings</code>의 <code>m_PerPlatformDefaultQuality</code>: WebGL → Mobile). 에디터에서 된다고 빌드에서 되는 것은 아닙니다.</li>
-      <li>WebGL은 빌드한 뒤 <b>브라우저 콘솔의 GL 경고</b>까지 확인합니다.</li>
+      <li>WebGL은 빌드한 뒤 브라우저 콘솔의 GL 경고까지 확인합니다.</li>
     </ul></dd>
   </dl>
 </article>
@@ -272,20 +272,20 @@
   <dl>
     <dt>내용</dt><dd><code>WebGL.wasm</code> 46MB, <code>WebGL.data</code> 19MB. 첫 로딩이 오래 걸렸습니다.</dd>
     <dt>먼저 확인</dt><dd><ul>
-      <li>GitHub Pages가 이미 <b>gzip으로 보내고 있어서</b>, 실제로 받는 양은 약 22MB였습니다 (<code>Content-Encoding: gzip</code>).</li>
+      <li>GitHub Pages가 이미 gzip으로 보내고 있어서 실제로 받는 양은 약 22MB였습니다 (<code>Content-Encoding: gzip</code>).</li>
       <li><code>BuildPlayerOptions</code>에 Development 옵션을 주지 않으므로 개발 빌드는 아니었습니다(처음의 추정이 틀림).</li>
       <li>빌드 보고서를 보니 data의 절반 이상이 한글 폰트(9.9MB)였습니다.</li>
     </ul></dd>
     <dt>해결</dt><dd><code>WebGLBuild</code>가 빌드 때마다 자동으로 적용합니다.<ul>
-      <li><b>한글 폰트 서브셋</b> (<code>Assets/Editor/FontSubsetter.cs</code>): 원본 가변 폰트는 빌드에 안 들어가는 <code>FoxGame/FontSource/</code>로 옮기고, C# 파일에 나오는 글자 + ASCII만 남긴 TTF를 <code>Resources</code>에 만듭니다 (508자, <b>9.9MB → 75KB</b>). 문구를 바꿔도 빌드 때 다시 만들어집니다.</li>
+      <li><b>한글 폰트 서브셋</b> (<code>Assets/Editor/FontSubsetter.cs</code>): 원본 가변 폰트는 빌드에 안 들어가는 <code>FoxGame/FontSource/</code>로 옮기고, C# 파일에 나오는 글자 + ASCII만 남긴 TTF를 <code>Resources</code>에 만듭니다 (508자, 9.9MB → 75KB). 문구를 바꿔도 빌드 때 다시 만들어집니다.</li>
       <li><b>코드 최적화</b> <code>DiskSizeLTO</code> (리플렉션으로 설정)</li>
       <li><b>코드 제거</b> <code>ManagedStrippingLevel.High</code></li>
     </ul></dd>
     <dt>결과</dt><dd><div class="table-wrap"><table>
       <tr><th></th><th>원래 크기</th><th>받는 양(gzip)</th></tr>
       <tr><td>전</td><td>62.8MB</td><td>21.8MB</td></tr>
-      <tr><td>후</td><td><b>37.5MB</b></td><td><b>13.2MB</b></td></tr>
-    </table></div>wasm 44.4 → 27.7MB, data 17.9 → 9.4MB · GitHub Pages 실측(gzip 전송): wasm 9.2MB + data 4.7MB ≈ <b>13.9MB</b></dd>
+      <tr><td>후</td><td>37.5MB</td><td>13.2MB</td></tr>
+    </table></div>wasm 44.4 → 27.7MB, data 17.9 → 9.4MB · GitHub Pages 실측(gzip 전송): wasm 9.2MB + data 4.7MB ≈ 13.9MB</dd>
     <dt>확인</dt><dd>브라우저에서 이동, 체리 먹기, 점프, 무너지는 바닥, 한글 GAME OVER 화면, Enter/R 재시작 모두 정상, 콘솔 오류 0건</dd>
     <dt>주의</dt><dd><ul>
       <li>코드 제거 High에서 리플렉션으로만 쓰는 코드가 빠질 수 있습니다. 새 패키지를 넣으면 WebGL에서 꼭 확인합니다.</li>
@@ -340,7 +340,7 @@
   <div class="head"><span class="num">#17</span><h3>커밋 기록 표에 이번 커밋 해시를 적을 수 없음</h3><span class="cat">문서</span><span class="badge warn">규칙</span></div>
   <dl>
     <dt>원인</dt><dd>커밋 해시는 커밋한 뒤에야 정해집니다.</dd>
-    <dt>규칙</dt><dd>표에는 <code>(이번 커밋)</code>으로 적고, <b>다음 커밋 때 실제 해시로 바꿉니다</b>.</dd>
+    <dt>규칙</dt><dd>표에는 <code>(이번 커밋)</code>으로 적고 다음 커밋 때 실제 해시로 바꿉니다.</dd>
   </dl>
 </article>
 
@@ -357,7 +357,7 @@
   <div class="head"><span class="num">#19</span><h3>Codex <code>exec -i</code>가 뒤에 오는 요청 문장까지 이미지 파일로 가져감</h3><span class="cat">도구</span><span class="badge done">해결</span></div>
   <dl>
     <dt>증상</dt><dd><code>Art/codex-draw.ps1</code>로 그림을 요청하자 <code>Reading prompt from stdin... No prompt provided via stdin.</code>이 나오고 그림이 만들어지지 않았습니다.</dd>
-    <dt>원인</dt><dd><code>-i, --image &lt;FILE&gt;...</code>는 <b>여러 파일을 받는</b> 옵션이라, 바로 뒤의 요청 문장도 이미지 경로로 가져갔습니다. 첫 수동 실행은 <code>-i</code> 뒤에 <code>-o</code>가 있어서 우연히 괜찮았습니다.</dd>
+    <dt>원인</dt><dd><code>-i, --image &lt;FILE&gt;...</code>는 여러 파일을 받는 옵션이라, 바로 뒤의 요청 문장도 이미지 경로로 가져갔습니다. 첫 수동 실행은 <code>-i</code> 뒤에 <code>-o</code>가 있어서 우연히 괜찮았습니다.</dd>
     <dt>해결</dt><dd>요청 문장을 명령줄 인수 대신 표준 입력으로 넘깁니다(<code>-</code> 인수 + <code>$OutputEncoding = UTF8</code>). 여러 줄 문장과 한글이 <code>codex.cmd</code> 배치 파일을 거치며 깨질 위험도 함께 없어졌습니다.</dd>
     <dt>교훈</dt><dd>여러 값을 받는 옵션 뒤에 위치 인수를 두지 않습니다. 긴 요청은 표준 입력으로 넘깁니다.</dd>
   </dl>
@@ -386,7 +386,7 @@
   <dl>
     <dt>내용</dt><dd>빌드 보고서에 게임에서 쓰지 않는 후처리 리소스가 약 3.3MB 들어 있습니다(FilmGrain 텍스처 11장, SMAA, BlueNoise, UberPost 셰이더). 카메라의 후처리는 꺼져 있고 씬에 Volume도 없습니다.</dd>
     <dt>시도</dt><dd><code>Mobile_Renderer</code>의 <code>postProcessData</code>를 비우고 다시 빌드했지만 크기가 그대로였습니다(37.5MB). 설정은 되돌렸습니다.</dd>
-    <dt>원인</dt><dd>Unity 6의 URP는 후처리 텍스처 · 셰이더를 <b>URP 전역 설정(<code>UniversalRenderPipelineGlobalSettings</code>)의 기본 리소스</b>로 항상 포함합니다. 또 <code>PC_Renderer</code>도 같은 데이터를 참조하고, 두 품질 설정이 모두 빌드에 들어갑니다.</dd>
+    <dt>원인</dt><dd>Unity 6의 URP는 후처리 텍스처 · 셰이더를 URP 전역 설정(<code>UniversalRenderPipelineGlobalSettings</code>)의 기본 리소스로 항상 포함합니다. 또 <code>PC_Renderer</code>도 같은 데이터를 참조하고, 두 품질 설정이 모두 빌드에 들어갑니다.</dd>
     <dt>상태</dt><dd>남음. gzip 후 영향은 1~2MB 정도로 작아서 보류합니다.</dd>
   </dl>
 </article>
@@ -399,7 +399,7 @@
       <li><b>Tools &gt; Fox &gt; Windows 스토어 빌드</b> (<code>WindowsStoreBuild</code>): 아이콘을 넣은 64비트 Windows 빌드 → <code>FoxGame/Builds/Windows/FoxGame.exe</code></li>
       <li><code>Store/make-msix.ps1</code>: <code>makeappx.exe</code>(Windows SDK 10.0.26100)로 포장 → <code>FoxGame/Builds/Store/*.msix</code>. 전체 신뢰 데스크톱 앱(<code>runFullTrust</code>), <code>*_DoNotShip</code> 폴더 제외</li>
     </ul></dd>
-    <dt>결과</dt><dd>빌드 96.8MB → MSIX <b>37.1MB</b>. 매니페스트 검사 통과, exe 실행 확인(Direct3D 12, 예외 없음)</dd>
+    <dt>결과</dt><dd>빌드 96.8MB → MSIX 37.1MB. 매니페스트 검사 통과, exe 실행 확인(Direct3D 12, 예외 없음)</dd>
     <dt>참고</dt><dd>UWP로 가려면 Unity UWP 모듈과 Visual Studio UWP 워크로드가 필요합니다. 이 게임에는 MSIX 방식으로 충분합니다.</dd>
   </dl>
 </article>
@@ -416,7 +416,7 @@
 <article class="issue" id="i25" data-status="warn">
   <div class="head"><span class="num">#25</span><h3>스토어 패키지 ID · 게시자 값이 임시값</h3><span class="cat">배포</span><span class="badge warn">사용자 작업</span></div>
   <dl>
-    <dt>내용</dt><dd>MSIX의 <code>Identity Name</code>, <code>Publisher</code>(<code>CN=...</code>), <code>PublisherDisplayName</code>은 <b>Partner Center에서 앱 이름을 예약해야</b> 받을 수 있습니다. 지금은 <code>Store/store-config.json</code>에 임시값(<code>...TEMP</code>)이 있어서 이대로는 스토어 업로드가 거부됩니다.</dd>
+    <dt>내용</dt><dd>MSIX의 <code>Identity Name</code>, <code>Publisher</code>(<code>CN=...</code>), <code>PublisherDisplayName</code>은 Partner Center에서 앱 이름을 예약해야 받을 수 있습니다. 지금은 <code>Store/store-config.json</code>에 임시값(<code>...TEMP</code>)이 있어서 이대로는 스토어 업로드가 거부됩니다.</dd>
     <dt>할 일</dt><dd><ul>
       <li>Partner Center에서 앱 이름 예약</li>
       <li><b>제품 관리 &gt; 제품 ID</b>의 값 세 개를 <code>store-config.json</code>에 입력</li>

@@ -337,7 +337,7 @@
     <div><b>한글 폰트</b>Noto Sans KR(OFL)을 <code>Assets/Resources/Fonts/</code>에 포함 (WebGL은 OS 폰트 못 씀)</div>
   </div>
   <h3>WebGL에서 찾은 문제</h3>
-  <p class="sub">타일 · 여우 · 체리(URP Lit)가 안 보이고 반투명 그림자 · 빛기둥만 보였습니다. WebGL은 <b>Mobile</b> 품질을 쓰는데 추가 조명 그림자가 꺼져 있어, Lit 셰이더의 그림자 샘플러(<code>_AdditionalLightsShadowmapTexture</code>) 자리에 일반 컬러 텍스처가 묶여 WebGL2가 그리기를 거부했습니다. <code>Mobile_RPAsset</code>의 Additional Lights &gt; Cast Shadows를 켜서 고쳤습니다.</p>
+  <p class="sub">타일 · 여우 · 체리(URP Lit)가 안 보이고 반투명 그림자 · 빛기둥만 보였습니다. WebGL은 Mobile 품질을 쓰는데 추가 조명 그림자가 꺼져 있어, Lit 셰이더의 그림자 샘플러(<code>_AdditionalLightsShadowmapTexture</code>) 자리에 일반 컬러 텍스처가 묶여 WebGL2가 그리기를 거부했습니다. <code>Mobile_RPAsset</code>의 Additional Lights &gt; Cast Shadows를 켜서 고쳤습니다.</p>
   <h3>WebGL 확인 결과 (Chrome 152, ANGLE D3D11)</h3>
   <div class="table-wrap">
     <table>
@@ -353,7 +353,7 @@
 
 <section>
   <h2>Microsoft Store용 Windows 빌드 (MSIX)</h2>
-  <p class="sub">Unity에 UWP 모듈이 없어서, Windows 데스크톱 빌드를 MSIX로 포장해 스토어의 Win32 앱으로 제출하는 방식을 씁니다 (<a href="이슈기록.html#i23">이슈 #23</a>).</p>
+  <p class="sub">Unity에 UWP 모듈이 없어서 Windows 데스크톱 빌드를 MSIX로 포장해 스토어의 Win32 앱으로 제출하는 방식을 씁니다 (<a href="이슈기록.html#i23">이슈 #23</a>).</p>
   <div class="table-wrap" style="margin-top:12px">
     <table>
       <tr><th>단계</th><th>방법</th><th>결과</th></tr>

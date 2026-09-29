@@ -1,8 +1,8 @@
-# 🦊 여우 복셀 3D 게임
+# 여우 복셀 3D 게임
 
 Blender로 만든 복셀 여우가 4x4 타일맵을 뛰어다니며 체리 5개를 모으는 Unity 6 캐주얼 게임입니다.
 
-### ▶ [브라우저에서 바로 하기](https://carttman.github.io/FoxGame/)
+### [브라우저에서 바로 하기](https://carttman.github.io/FoxGame/)
 
 PC 브라우저(Chrome · Edge 등)에서 설치 없이 실행됩니다. 처음 불러올 때 약 13MB를 받습니다.
 
@@ -13,7 +13,7 @@ PC 브라우저(Chrome · Edge 등)에서 설치 없이 실행됩니다. 처음 
 - 체리 5개를 모두 모으면 **CLEAR!**
 - 구멍이나 맵 밖으로 떨어지면 **GAME OVER**
 - 구멍 위 공중에 떠 있는 체리(빛기둥 표시)는 점프해야 먹을 수 있습니다
-- **여우가 지나간 바닥은 흔들리다가 1초 뒤에 떨어집니다.** 한 번 지나간 길로는 돌아갈 수 없으니 순서를 생각하세요 (가만히 있거나 제자리 점프는 괜찮아요)
+- 여우가 지나간 바닥은 흔들리다가 1초 뒤에 떨어집니다. 한 번 지나간 길로는 돌아갈 수 없으니 순서를 생각하세요. 가만히 있거나 제자리에서 점프하는 것은 괜찮습니다.
 
 ![무너지는 바닥](FoxGame/Captures/step8_crumble.png)
 
@@ -34,7 +34,7 @@ PC 브라우저(Chrome · Edge 등)에서 설치 없이 실행됩니다. 처음 
 
 Unity 에디터:
 
-1. [Unity Hub](https://unity.com/download)에서 **Add** → `FoxGame` 폴더 선택 (Unity **6000.3.10f1**)
+1. [Unity Hub](https://unity.com/download)에서 **Add** → `FoxGame` 폴더 선택 (Unity 6000.3.10f1)
 2. `Assets/Scenes/FoxGame.unity` 열기 → **Play**
 
 ## 구성
@@ -42,7 +42,7 @@ Unity 에디터:
 | 폴더 | 내용 |
 |---|---|
 | `Blender/` | 복셀 모델 생성 스크립트 (`make_fox.py`, `make_cherry.py`) 와 결과물(.blend / .fbx) |
-| `FoxGame/Assets/Scripts/` | 게임 코드 — 이동·점프, 부위 회전 애니메이션, 아이템, 게임 상태, HUD, 결과 화면, 무너지는 바닥 |
+| `FoxGame/Assets/Scripts/` | 게임 코드: 이동·점프, 부위 회전 애니메이션, 아이템, 게임 상태, HUD, 결과 화면, 무너지는 바닥 |
 | `FoxGame/Assets/Editor/` | 단계별 씬 셋업·검증 스크립트 (메뉴 **Tools > Fox**) |
 | `FoxGame/Assets/Tests/PlayMode/` | Play 모드 테스트 (가상 키보드로 실제 게임 루프 확인) |
 | `개발계획서.md` / `.html` | 단계별 개발 계획과 진행 기록 |
@@ -71,7 +71,7 @@ powershell -ExecutionPolicy Bypass -File Art/codex-draw.ps1 -Name title_bg -Prom
 powershell -ExecutionPolicy Bypass -File Store/make-msix.ps1
 ```
 
-스토어에 올리기 전에 `Store/store-config.json`의 패키지 ID·게시자 값을 Partner Center의 **제품 ID** 값으로 바꿔야 합니다 (지금은 임시값).
+스토어에 올리기 전에 `Store/store-config.json`의 패키지 ID·게시자 값을 Partner Center의 **제품 ID** 값으로 바꿔야 합니다. 지금 들어 있는 값은 임시값입니다.
 
 ### 모델 다시 만들기
 
