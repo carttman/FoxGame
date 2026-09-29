@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>여우 게임 이슈 기록</title>
+<style>
+  :root {
+    --bg: #faf7f2; --card: #ffffff; --text: #2b2420; --muted: #7a6f66;
+    --line: #e8e0d6; --accent: #e8731a; --accent-soft: #fde9d7;
+    --done: #2f9e5b; --done-soft: #dff3e7;
+    --warn: #b7791f; --warn-soft: #fbefd5;
+    --open: #c2410c; --open-soft: #fde4d8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1c1917; --card: #262220; --text: #efe8e1; --muted: #a89e95;
+      --line: #3a3430; --accent: #ff8a33; --accent-soft: #3d2a1c;
+      --done: #4cc47f; --done-soft: #1f3528;
+      --warn: #e8b04a; --warn-soft: #3a2f1a;
+      --open: #ff8a5c; --open-soft: #3d2319;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1c1917; --card: #262220; --text: #efe8e1; --muted: #a89e95;
+    --line: #3a3430; --accent: #ff8a33; --accent-soft: #3d2a1c;
+    --done: #4cc47f; --done-soft: #1f3528;
+    --warn: #e8b04a; --warn-soft: #3a2f1a;
+    --open: #ff8a5c; --open-soft: #3d2319;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Pretendard", "Malgun Gothic", "Apple SD Gothic Neo", system-ui, sans-serif;
+    line-height: 1.6;
+  }
+  main { max-width: 960px; margin: 0 auto; padding: 32px 16px 64px; }
+  header { margin-bottom: 24px; }
+  h1 { font-size: 1.9rem; margin: 0 0 4px; }
+  h2 { font-size: 1.3rem; margin: 0 0 16px; padding-left: 10px; border-left: 4px solid var(--accent); }
+  .sub { color: var(--muted); margin: 0; }
+  a { color: var(--accent); }
+  /* 한글 글꼴은 역슬래시를 ₩로 그리므로 경로·코드는 고정폭 글꼴로 */
+  code, pre { font-family: "Cascadia Mono", Consolas, "D2Coding", monospace; }
+  code { font-size: .88em; background: var(--bg); border-radius: 4px; padding: 1px 5px; overflow-wrap: anywhere; }
+  pre { background: var(--bg); border-radius: 10px; padding: 12px 14px; overflow-x: auto; font-size: .85rem; margin: 8px 0 0; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 22px; margin-bottom: 20px; }
+
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 18px; }
+  .stats div { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+  .stats b { display: block; font-size: 1.6rem; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .stats span { color: var(--muted); font-size: .85rem; }
+  .stats .done b { color: var(--done); } .stats .warn b { color: var(--warn); } .stats .open b { color: var(--open); }
+
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .filters button {
+    font: inherit; font-size: .85rem; padding: 4px 12px; border-radius: 99px; cursor: pointer;
+    border: 1px solid var(--line); background: var(--bg); color: var(--text);
+  }
+  .filters button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: .85rem; }
+  td.n { color: var(--muted); font-variant-numeric: tabular-nums; width: 36px; }
+  td a { color: inherit; text-decoration: none; }
+  td a:hover { color: var(--accent); text-decoration: underline; }
+  .table-wrap { overflow-x: auto; }
+
+  .badge { font-size: .75rem; font-weight: 700; padding: 2px 10px; border-radius: 99px; white-space: nowrap; display: inline-block; }
+  .badge.done { background: var(--done-soft); color: var(--done); }
+  .badge.warn { background: var(--warn-soft); color: var(--warn); }
+  .badge.open { background: var(--open-soft); color: var(--open); }
+  .cat { font-size: .75rem; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; white-space: nowrap; }
+
+  article.issue { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; margin-bottom: 14px; scroll-margin-top: 16px; }
+  article.issue:target { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .issue .head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 10px; }
+  .issue .head .num { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .issue h3 { font-size: 1.05rem; margin: 0; flex: 1 1 260px; }
+  .issue dl { margin: 0; display: grid; grid-template-columns: 72px 1fr; gap: 6px 14px; }
+  .issue dt { color: var(--muted); font-size: .85rem; font-weight: 600; padding-top: 2px; }
+  .issue dd { margin: 0; min-width: 0; }
+  .issue dd ul { margin: 0; padding-left: 18px; }
+  .issue dd li + li { margin-top: 2px; }
+  .hidden { display: none; }
+  @media (max-width: 520px) {
+    .issue dl { grid-template-columns: 1fr; gap: 2px; }
+    .issue dd { margin-bottom: 8px; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <h1>이슈 기록</h1>
+  <p class="sub">여우 복셀 3D 게임 · 개발 중 부딪힌 문제의 원인 · 해결 · 재발 방지 · 마지막 갱신 2026-09-29</p>
+  <p class="sub" style="margin-top:6px">원본: <a href="이슈기록.md">이슈기록.md</a> · 관련: <a href="개발계획서.html">개발계획서</a> · <a href="https://carttman.github.io/FoxGame/">웹 게임</a></p>
+  <div class="stats">
+    <div><b id="stat-all">18</b><span>전체</span></div>
+    <div class="done"><b id="stat-done">13</b><span>해결</span></div>
+    <div class="warn"><b id="stat-warn">4</b><span>우회 · 규칙 · 수동</span></div>
+    <div class="open"><b id="stat-open">1</b><span>남음</span></div>
+  </div>
+</header>
+
+<section>
+  <h2>요약</h2>
+  <div class="filters" role="group" aria-label="상태 필터">
+    <button type="button" data-filter="all" aria-pressed="true">전체</button>
+    <button type="button" data-filter="done" aria-pressed="false">해결</button>
+    <button type="button" data-filter="warn" aria-pressed="false">우회 · 규칙</button>
+    <button type="button" data-filter="open" aria-pressed="false">남음</button>
+  </div>
+  <div class="table-wrap">
+    <table id="summary">
+      <tr><th>#</th><th>분류</th><th>이슈</th><th>상태</th></tr>
+      <tr data-status="done"><td class="n">1</td><td><span class="cat">게임</span></td><td><a href="#i1">공중 체리가 뒤쪽 타일 위에 있는 것처럼 보임</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="done"><td class="n">2</td><td><span class="cat">게임</span></td><td><a href="#i2">공중 체리를 먹고 클리어되면 조작이 잠겨 구멍에 빠짐</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="done"><td class="n">3</td><td><span class="cat">테스트</span></td><td><a href="#i3">fps가 아주 높으면 여우가 움직이지 않음</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="warn"><td class="n">4</td><td><span class="cat">환경</span></td><td><a href="#i4">git이 PATH에 없음</a></td><td><span class="badge warn">우회 중</span></td></tr>
+      <tr data-status="done"><td class="n">5</td><td><span class="cat">환경</span></td><td><a href="#i5">프로젝트 폴더를 옮긴 뒤 옛 경로(<code>D:\t</code>)가 남아 있음</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="done"><td class="n">6</td><td><span class="cat">프로젝트</span></td><td><a href="#i6">URP 템플릿 샘플 파일이 남아 있음</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="done"><td class="n">7</td><td><span class="cat">빌드</span></td><td><a href="#i7">WebGL 모듈이 설치돼 있지 않음</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="done"><td class="n">8</td><td><span class="cat">빌드</span></td><td><a href="#i8">WebGL에서 결과 화면 한글이 안 보임</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="done"><td class="n">9</td><td><span class="cat">도구</span></td><td><a href="#i9">PowerShell 5.1이 BOM 없는 UTF-8 스크립트의 한글을 깨뜨림</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="done"><td class="n">10</td><td><span class="cat">도구</span></td><td><a href="#i10">Python·Node가 없어 로컬 웹 서버를 띄울 수 없음</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="done"><td class="n">11</td><td><span class="cat">빌드</span></td><td><a href="#i11">WebGL에서 타일·여우·체리가 안 보임 (그림자 샘플러 형식 불일치)</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="open"><td class="n">12</td><td><span class="cat">빌드</span></td><td><a href="#i12">WebGL 빌드 용량이 큼 (약 63MB)</a></td><td><span class="badge open">남음</span></td></tr>
+      <tr data-status="warn"><td class="n">13</td><td><span class="cat">도구</span></td><td><a href="#i13">에디터가 프로젝트를 열고 있으면 배치 모드 검증을 돌릴 수 없음</a></td><td><span class="badge warn">우회 중</span></td></tr>
+      <tr data-status="done"><td class="n">14</td><td><span class="cat">게임</span></td><td><a href="#i14">정적 배칭된 타일은 빌드에서 움직이지 않음</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="done"><td class="n">15</td><td><span class="cat">테스트</span></td><td><a href="#i15">기존 전체 코스 검증 경로가 무너지는 바닥 규칙과 맞지 않음</a></td><td><span class="badge done">정리</span></td></tr>
+      <tr data-status="done"><td class="n">16</td><td><span class="cat">테스트</span></td><td><a href="#i16">검증 캡처의 HUD가 0 / 5로 나옴</a></td><td><span class="badge done">해결</span></td></tr>
+      <tr data-status="warn"><td class="n">17</td><td><span class="cat">문서</span></td><td><a href="#i17">커밋 기록 표에 이번 커밋 해시를 적을 수 없음</a></td><td><span class="badge warn">규칙</span></td></tr>
+      <tr data-status="warn"><td class="n">18</td><td><span class="cat">배포</span></td><td><a href="#i18">GitHub Pages가 빌드마다 자동 갱신되지 않음</a></td><td><span class="badge warn">수동</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<div id="issues">
+
+<article class="issue" id="i1" data-status="done">
+  <div class="head"><span class="num">#1</span><h3>공중 체리가 뒤쪽 타일 위에 있는 것처럼 보임</h3><span class="cat">게임</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>증상</dt><dd>구멍 (1,2) 위 1.8m에 떠 있는 체리가 쿼터뷰에서는 뒤쪽 타일 (1,3) 위에 놓인 것처럼 보였습니다.</dd>
+    <dt>원인</dt><dd>높이 단서가 없는 공중 물체는 고정 쿼터뷰에서 깊이를 알기 어렵습니다. 체리 그림자도 뒤쪽 타일에 떨어져 착시를 키웠습니다.</dd>
+    <dt>해결</dt><dd>공중 체리의 그림자를 끄고, 구멍 속까지 내려가는 반투명 빛기둥을 추가했습니다 (<code>ItemSetup</code>).</dd>
+    <dt>교훈</dt><dd>쿼터뷰에서 공중에 두는 물체에는 수직 기준선(빛기둥, 그림자 등)을 붙입니다.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i2" data-status="done">
+  <div class="head"><span class="num">#2</span><h3>공중 체리를 먹고 클리어되면 조작이 잠겨 구멍에 빠짐</h3><span class="cat">게임</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>증상</dt><dd>마지막 체리가 구멍 위 공중 체리이면, 먹는 순간 클리어 → 조작 잠금 → 수평 이동이 멈춰 여우가 구멍으로 떨어졌습니다.</dd>
+    <dt>원인</dt><dd>조작을 잠글 때 공중에서 하던 이동까지 멈췄습니다.</dd>
+    <dt>해결</dt><dd><code>FoxController.InputEnabled</code>가 꺼져도 <b>공중에서는 하던 이동을 이어 가 착지</b>하게 했습니다 (<code>carriedDir</code>). 착지한 뒤에 멈춥니다.</dd>
+    <dt>검증</dt><dd>ResultSetup "전부 수집 → 클리어" (여우가 건너편에 착지)</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i3" data-status="done">
+  <div class="head"><span class="num">#3</span><h3>fps가 아주 높으면 여우가 움직이지 않음</h3><span class="cat">테스트</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>증상</dt><dd>Play 모드 테스트를 배치 모드로 돌리면 W를 눌러도 여우가 움직이지 않았습니다.</dd>
+    <dt>원인</dt><dd>배치 모드는 프레임당 0.0001초 수준이라 한 프레임 이동량이 <code>CharacterController.minMoveDistance</code>(기본 0.001m)보다 작아 무시됐습니다.</dd>
+    <dt>해결</dt><dd><code>minMoveDistance = 0</code> (<code>LevelBuilder</code>). 테스트는 <code>Application.targetFrameRate = 60</code>으로 실제 플레이와 비슷하게 맞췄습니다.</dd>
+    <dt>교훈</dt><dd>편집 모드 시뮬레이션만으로는 못 찾는 문제가 있어 Play 모드 테스트도 함께 돌립니다.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i4" data-status="warn">
+  <div class="head"><span class="num">#4</span><h3>git이 PATH에 없음</h3><span class="cat">환경</span><span class="badge warn">우회 중</span></div>
+  <dl>
+    <dt>증상</dt><dd>터미널에서 <code>git</code>을 찾을 수 없습니다.</dd>
+    <dt>우회</dt><dd>GitHub Desktop에 들어 있는 git을 씁니다.<pre>%LOCALAPPDATA%\GitHubDesktop\app-*\resources\app\git\cmd\git.exe</pre></dd>
+    <dt>참고</dt><dd><code>gh</code> CLI도 없어서 GitHub 설정 변경(Pages 등)은 git push만으로 가능한 방식을 씁니다 (<a href="#i18">#18</a>).</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i5" data-status="done">
+  <div class="head"><span class="num">#5</span><h3>프로젝트 폴더를 옮긴 뒤 옛 경로(<code>D:\t</code>)가 남아 있음</h3><span class="cat">환경</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>증상</dt><dd><ul>
+      <li>개발계획서의 실행 방법 · Git · 폴더 구조가 <code>D:\t</code>를 가리켰습니다.</li>
+      <li>Unity Hub가 옛 복사본 <code>D:\t\FoxGame</code>을 열고 있어서, <code>D:\FoxGame</code>에 추가한 <b>Tools &gt; Fox &gt; WebGL 빌드</b> 메뉴가 보이지 않았습니다.</li>
+    </ul></dd>
+    <dt>원인</dt><dd>저장소를 <code>D:\t</code>에서 <code>D:\FoxGame</code>으로 옮기면서 옛 폴더와 Unity Hub 항목이 남았습니다. <code>D:\t</code>는 커밋 <code>7d4db7f</code>에 멈춘 별도 복사본이었습니다.</dd>
+    <dt>찾은 방법</dt><dd><code>%LOCALAPPDATA%\Unity\Editor\Editor.log</code>의 <code>-projectpath</code> 인수, <code>Win32_Process</code>의 Unity 명령줄</dd>
+    <dt>해결</dt><dd>문서 경로를 <code>D:\FoxGame</code>으로 고치고, Unity Hub에서 <code>D:\FoxGame\FoxGame</code>을 열고, <code>D:\t</code>를 휴지통으로 보냈습니다.</dd>
+    <dt>교훈</dt><dd>에디터에서 변경이 안 보이면 <b>에디터가 연 프로젝트 경로부터</b> 확인합니다.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i6" data-status="done">
+  <div class="head"><span class="num">#6</span><h3>URP 템플릿 샘플 파일이 남아 있음</h3><span class="cat">프로젝트</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>내용</dt><dd><code>SampleScene.unity</code>, <code>TutorialInfo/</code>, <code>Readme.asset</code>이 남아 있었습니다.</dd>
+    <dt>해결</dt><dd>씬 · 프리팹 · 스크립트 · 빌드 설정 어디에서도 GUID로 참조하지 않는 것을 확인한 뒤 삭제했습니다 (<code>e6836b8</code>).</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i7" data-status="done">
+  <div class="head"><span class="num">#7</span><h3>WebGL 모듈이 설치돼 있지 않음</h3><span class="cat">빌드</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>증상</dt><dd>6000.3.10f1에는 <code>windowsstandalonesupport</code>만 있었습니다. 6000.6.3f1에는 WebGL이 있었지만, 버전을 올리면 프로젝트가 업그레이드됩니다.</dd>
+    <dt>해결</dt><dd>Unity Hub CLI로 모듈을 설치했습니다 (약 4.4GB). 설치 뒤에는 에디터를 다시 열어야 인식합니다.<pre>"C:\Program Files\Unity Hub\Unity Hub.exe" -- --headless install-modules --version 6000.3.10f1 -m webgl</pre></dd>
+    <dt>예방</dt><dd><code>WebGLBuild</code>가 모듈 유무(<code>BuildPipeline.IsBuildTargetSupported</code>)를 먼저 확인하고 안내합니다.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i8" data-status="done">
+  <div class="head"><span class="num">#8</span><h3>WebGL에서 결과 화면 한글이 안 보임</h3><span class="cat">빌드</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>원인</dt><dd><code>ResultScreen</code>이 <code>Font.CreateDynamicFontFromOSFont</code>로 맑은 고딕을 불러왔는데, 브라우저에서는 OS 폰트를 쓸 수 없습니다. 기본 <code>LegacyRuntime.ttf</code>에는 한글이 없습니다.</dd>
+    <dt>해결</dt><dd>PC에 있던 <b>Noto Sans KR</b>(SIL OFL, 배포 가능)을 <code>Assets/Resources/Fonts/NotoSansKR.ttf</code>에 넣고, <code>Resources.Load</code>로 먼저 쓰게 했습니다. 폰트가 없으면 OS 폰트를 씁니다. 라이선스 파일도 함께 넣었습니다.</dd>
+    <dt>주의</dt><dd>맑은 고딕 같은 Windows 폰트는 재배포 라이선스가 없어서 게임에 넣으면 안 됩니다.</dd>
+    <dt>비용</dt><dd>폰트 약 10MB가 빌드에 들어갑니다 (<a href="#i12">#12</a>).</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i9" data-status="done">
+  <div class="head"><span class="num">#9</span><h3>PowerShell 5.1이 BOM 없는 UTF-8 스크립트의 한글을 깨뜨림</h3><span class="cat">도구</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>원인</dt><dd>Windows PowerShell 5.1은 BOM 없는 <code>.ps1</code>을 시스템 코드 페이지(CP949)로 읽습니다.</dd>
+    <dt>해결</dt><dd><code>FoxGame/Tools/serve-webgl.ps1</code>은 영어(ASCII)만 쓰도록 했습니다.</dd>
+    <dt>교훈</dt><dd><code>.ps1</code>에 한글을 쓰려면 UTF-8 <b>BOM</b>으로 저장하거나 ASCII만 씁니다.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i10" data-status="done">
+  <div class="head"><span class="num">#10</span><h3>Python·Node가 없어 로컬 웹 서버를 띄울 수 없음</h3><span class="cat">도구</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>증상</dt><dd><code>python</code>은 Microsoft Store 설치 안내 스텁이고, <code>node</code>는 없었습니다. WebGL은 <code>file://</code>로 열면 동작하지 않습니다.</dd>
+    <dt>해결</dt><dd><code>HttpListener</code>로 만든 PowerShell 정적 서버 <code>FoxGame/Tools/serve-webgl.ps1</code>을 추가했습니다. <code>.wasm</code>에 <code>application/wasm</code>를 보내고 <code>.claude/launch.json</code>에 <code>foxgame-webgl</code>로 등록했습니다.</dd>
+    <dt>참고</dt><dd>WebGL 빌드는 압축을 꺼서(<code>WebGLCompressionFormat.Disabled</code>) 서버 설정 없이 열립니다.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i11" data-status="done">
+  <div class="head"><span class="num">#11</span><h3>WebGL에서 타일·여우·체리가 안 보임 (그림자 샘플러 형식 불일치)</h3><span class="cat">빌드</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>증상</dt><dd>브라우저에서 HUD, 반투명 그림자, 빛기둥만 보이고 URP Lit 물체가 전부 사라졌습니다. 콘솔에 경고가 가득했습니다.<pre>GL_INVALID_OPERATION: glDrawElements: Mismatch between texture format and sampler type (signed/unsigned/float/shadow)</pre></dd>
+    <dt>찾은 방법</dt><dd><ul>
+      <li>브라우저에서 WebGL2 <code>drawElements</code>를 가로채, 실패한 호출마다 셰이더의 샘플러와 실제로 묶인 텍스처 형식을 기록했습니다.</li>
+      <li><code>hlslcc_zcmp_AdditionalLightsShadowmapTexture</code>가 <code>sampler2DShadow</code>인데, 묶인 텍스처는 16×16 <code>SRGB8_ALPHA8</code>이었고 비교 모드도 꺼져 있었습니다.</li>
+      <li>그 자리에 메인 그림자 맵(깊이 텍스처)을 임시로 넣어 보니 오류 0건에 화면이 정상이 됐습니다 → 원인 확정.</li>
+    </ul></dd>
+    <dt>원인</dt><dd>WebGL은 <b>Mobile</b> 품질(<code>Mobile_RPAsset</code>)을 씁니다. 이 설정은 추가 조명 그림자가 꺼져 있어서, URP가 추가 조명 그림자 맵 자리에 일반 컬러 텍스처를 묶었습니다. 그런데 Lit 셰이더는 여전히 그 텍스처를 그림자 샘플러로 읽습니다. WebGL2는 형식이 맞지 않으면 그리기를 거부합니다. 에디터(PC 품질, D3D11)에서는 드러나지 않았습니다.</dd>
+    <dt>해결</dt><dd><code>Mobile_RPAsset</code>의 <code>m_AdditionalLightShadowsSupported: 1</code>. 추가 조명이 없어 비용은 거의 없습니다.</dd>
+    <dt>교훈</dt><dd><ul>
+      <li>플랫폼마다 쓰는 품질 설정이 다릅니다 (<code>QualitySettings</code>의 <code>m_PerPlatformDefaultQuality</code>: WebGL → Mobile). 에디터에서 된다고 빌드에서 되는 것은 아닙니다.</li>
+      <li>WebGL은 빌드한 뒤 <b>브라우저 콘솔의 GL 경고</b>까지 확인합니다.</li>
+    </ul></dd>
+  </dl>
+</article>
+
+<article class="issue" id="i12" data-status="open">
+  <div class="head"><span class="num">#12</span><h3>WebGL 빌드 용량이 큼 (약 63MB)</h3><span class="cat">빌드</span><span class="badge open">남음</span></div>
+  <dl>
+    <dt>내용</dt><dd><code>WebGL.wasm</code> 46MB, <code>WebGL.data</code> 19MB. 첫 로딩이 오래 걸립니다.</dd>
+    <dt>추정 원인</dt><dd>Development Build가 켜져 있을 가능성이 있고(빌드 폴더에 <code>MemoryProfiler.png</code>), 압축을 껐으며, 한글 폰트 10MB가 들어 있습니다.</dd>
+    <dt>개선 후보</dt><dd><ul>
+      <li>Build Profiles에서 Development Build 끄기</li>
+      <li>폰트를 쓰는 글자만 남기기(서브셋)</li>
+      <li>Brotli/Gzip 압축 + <code>decompressionFallback</code></li>
+    </ul></dd>
+    <dt>상태</dt><dd>아직 하지 않음</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i13" data-status="warn">
+  <div class="head"><span class="num">#13</span><h3>에디터가 프로젝트를 열고 있으면 배치 모드 검증을 돌릴 수 없음</h3><span class="cat">도구</span><span class="badge warn">우회 중</span></div>
+  <dl>
+    <dt>원인</dt><dd>Unity는 같은 프로젝트를 두 인스턴스가 동시에 열 수 없습니다.</dd>
+    <dt>우회</dt><dd><ul>
+      <li>프로젝트를 임시 폴더에 통째로 복사해(<code>Library</code> 포함, <code>Temp</code> · <code>Logs</code> · <code>Builds</code> · <code>UserSettings</code> 제외) 복사본에서 검증합니다.</li>
+      <li><code>-executeMethod VerifyAll.Run</code> / <code>-runTests -testPlatform PlayMode</code></li>
+      <li>통과를 확인한 뒤, 씬을 바꾸는 셋업은 사용자가 에디터 메뉴로 실행합니다.</li>
+    </ul></dd>
+    <dt>참고</dt><dd>복사본 로그의 <code>Library\PackageCache ... DirectoryNotFoundException</code> 오류는 복사한 패키지 캐시 경로 문제이고, 검증 결과와는 관계없습니다.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i14" data-status="done">
+  <div class="head"><span class="num">#14</span><h3>정적 배칭된 타일은 빌드에서 움직이지 않음</h3><span class="cat">게임</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>내용</dt><dd>무너지는 바닥(8단계)을 만들 때, 타일이 <code>BatchingStatic</code>으로 표시돼 있었습니다. 정적 배칭된 메시는 빌드에서 합쳐지기 때문에 Transform을 움직여도 화면에서는 그대로입니다.</dd>
+    <dt>해결</dt><dd><code>CrumbleSetup.ApplyTo</code>가 타일과 자식의 정적 표시를 지우고, <code>LevelBuilder</code>는 더 이상 정적 표시를 붙이지 않습니다.</dd>
+    <dt>교훈</dt><dd>나중에 움직일 수 있는 물체는 정적으로 표시하지 않습니다.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i15" data-status="done">
+  <div class="head"><span class="num">#15</span><h3>기존 전체 코스 검증 경로가 무너지는 바닥 규칙과 맞지 않음</h3><span class="cat">테스트</span><span class="badge done">정리</span></div>
+  <dl>
+    <dt>내용</dt><dd>ItemSetup · ResultSetup의 "전체 코스" 경로는 같은 타일을 다시 지나갑니다. 무너지는 바닥 규칙에서는 불가능한 경로입니다.</dd>
+    <dt>처리</dt><dd>이 시뮬레이션들은 <code>TileCrumbler</code>를 돌리지 않아, 무너짐 없이 체리 · 결과 로직만 확인하는 검증으로 그대로 둡니다. 새 규칙에서의 클리어는 CrumbleSetup의 "무너지는 바닥으로 전체 코스 클리어"에서 다른 경로로 확인합니다.</dd>
+    <dt>주의</dt><dd>레벨 배치(<code>LevelLayout.Rows</code>)를 바꾸면 CrumbleSetup의 클리어 경로도 다시 확인해야 합니다.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i16" data-status="done">
+  <div class="head"><span class="num">#16</span><h3>검증 캡처의 HUD가 0 / 5로 나옴</h3><span class="cat">테스트</span><span class="badge done">해결</span></div>
+  <dl>
+    <dt>원인</dt><dd>에디터 시뮬레이션에서는 <code>Start</code>가 불리지 않아 HUD가 <code>GameManager</code>에 연결되지 않았습니다.</dd>
+    <dt>해결</dt><dd>CrumbleSetup의 <code>Sim.Start</code>에서 <code>GameHUD.Bind(game)</code>을 직접 호출합니다.</dd>
+    <dt>교훈</dt><dd>에디터 시뮬레이션에서는 <code>Awake</code> · <code>Start</code> · <code>Update</code>가 불리지 않습니다. 필요한 초기화(<code>Init</code>, <code>Bind</code>)와 <code>Tick</code>을 직접 호출해야 합니다.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i17" data-status="warn">
+  <div class="head"><span class="num">#17</span><h3>커밋 기록 표에 이번 커밋 해시를 적을 수 없음</h3><span class="cat">문서</span><span class="badge warn">규칙</span></div>
+  <dl>
+    <dt>원인</dt><dd>커밋 해시는 커밋한 뒤에야 정해집니다.</dd>
+    <dt>규칙</dt><dd>표에는 <code>(이번 커밋)</code>으로 적고, <b>다음 커밋 때 실제 해시로 바꿉니다</b>.</dd>
+  </dl>
+</article>
+
+<article class="issue" id="i18" data-status="warn">
+  <div class="head"><span class="num">#18</span><h3>GitHub Pages가 빌드마다 자동 갱신되지 않음</h3><span class="cat">배포</span><span class="badge warn">수동</span></div>
+  <dl>
+    <dt>방식</dt><dd>빌드 결과만 담은 <code>gh-pages</code> 브랜치를 따로 push합니다. <code>main</code>과는 이력이 별개입니다. 처음 push할 때 Pages가 자동으로 켜졌습니다 (<code>gh</code> CLI 없이도 됨).</dd>
+    <dt>절차</dt><dd><b>Tools &gt; Fox &gt; WebGL 빌드</b> → <code>Builds/WebGL</code> 내용 + <code>.nojekyll</code>을 <code>gh-pages</code>에 커밋 · push → 1분쯤 뒤 공개 사이트의 <code>Build/WebGL.wasm</code> 크기가 로컬과 같은지 확인</dd>
+    <dt>개선 후보</dt><dd>GitHub Actions로 자동 배포. 다만 Unity 라이선스가 필요해 설정 부담이 있습니다.</dd>
+  </dl>
+</article>
+
+</div>
+
+</main>
+<script>
+  // 상태 필터 + 개수 (행·카드의 data-status로 계산하므로 이슈를 추가해도 숫자가 맞는다)
+  const rows = [...document.querySelectorAll('#summary tr[data-status]')];
+  const cards = [...document.querySelectorAll('#issues .issue')];
+  const count = s => rows.filter(r => s === 'all' || r.dataset.status === s).length;
+  for (const s of ['all', 'done', 'warn', 'open']) document.getElementById('stat-' + s).textContent = count(s);
+
+  const buttons = document.querySelectorAll('.filters button');
+  buttons.forEach(b => b.addEventListener('click', () => {
+    const f = b.dataset.filter;
+    buttons.forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    for (const el of [...rows, ...cards]) el.classList.toggle('hidden', f !== 'all' && el.dataset.status !== f);
+  }));
+</script>
+</body>
+</html>
