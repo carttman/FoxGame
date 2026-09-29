@@ -1,0 +1,18 @@
+# 텍스트는 저장소에 LF로 저장
+* text=auto
+
+# Unity YAML 에셋: 줄바꿈 변환 없이, 병합은 Unity Smart Merge 권장
+*.unity    text eol=lf linguist-generated
+*.prefab   text eol=lf linguist-generated
+*.mat      text eol=lf linguist-generated
+*.asset    text eol=lf linguist-generated
+*.meta     text eol=lf linguist-generated
+*.anim     text eol=lf linguist-generated
+*.controller text eol=lf linguist-generated
+
+# 바이너리
+*.fbx   binary
+*.blend binary
+*.png   binary
+*.jpg   binary
+*.ttf   binary

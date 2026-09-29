@@ -1,0 +1,42 @@
+# ── Unity (FoxGame) ─────────────────────────────
+# Unity가 자동으로 다시 만드는 폴더
+FoxGame/[Ll]ibrary/
+FoxGame/[Tt]emp/
+FoxGame/[Oo]bj/
+FoxGame/[Ll]ogs/
+FoxGame/[Uu]ser[Ss]ettings/
+FoxGame/[Bb]uild/
+FoxGame/[Bb]uilds/
+FoxGame/[Mm]emoryCaptures/
+FoxGame/[Rr]ecordings/
+
+# IDE가 만드는 프로젝트 파일
+FoxGame/*.csproj
+FoxGame/*.sln
+FoxGame/*.slnx
+FoxGame/*.suo
+FoxGame/*.user
+FoxGame/*.pidb
+FoxGame/*.booproj
+FoxGame/*.unityproj
+.vs/
+.vscode/
+.idea/
+
+# 빌드 산출물 / 크래시 로그
+*.apk
+*.aab
+*.unitypackage
+sysinfo.txt
+crashlytics-build.properties
+mono_crash.*
+
+# ── Blender ─────────────────────────────────────
+*.blend1
+*.blend2
+__pycache__/
+
+# ── OS ──────────────────────────────────────────
+Thumbs.db
+Desktop.ini
+.DS_Store
