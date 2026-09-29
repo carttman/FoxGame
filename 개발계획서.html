@@ -352,6 +352,25 @@
 </section>
 
 <section>
+  <h2>Microsoft Store용 Windows 빌드 (MSIX)</h2>
+  <p class="sub">Unity에 UWP 모듈이 없어서, Windows 데스크톱 빌드를 MSIX로 포장해 스토어의 Win32 앱으로 제출하는 방식을 씁니다 (<a href="이슈기록.html#i23">이슈 #23</a>).</p>
+  <div class="table-wrap" style="margin-top:12px">
+    <table>
+      <tr><th>단계</th><th>방법</th><th>결과</th></tr>
+      <tr><td>1. 아이콘</td><td>Codex가 그린 <code>Art/app_icon.png</code> → 모서리 투명 처리 → <code>Assets/UI/app_icon.png</code></td><td>exe · 창 아이콘</td></tr>
+      <tr><td>2. Windows 빌드</td><td><b>Tools &gt; Fox &gt; Windows 스토어 빌드</b> (64비트, 폰트 서브셋 포함)</td><td><code>Builds/Windows/FoxGame.exe</code> (96.8MB)</td></tr>
+      <tr><td>3. MSIX 포장</td><td><code>Store/make-msix.ps1</code> (<code>makeappx.exe</code>)</td><td><code>Builds/Store/*.msix</code> (37.1MB, 서명 없음)</td></tr>
+    </table>
+  </div>
+  <div class="kv" style="margin-top:12px">
+    <div><b>타일 이미지</b>StoreLogo 50 · Square44x44(+256) · Square150x150 · Wide310x150 · Square310x310 (자동 생성)</div>
+    <div><b>매니페스트</b>전체 신뢰 데스크톱 앱(<code>runFullTrust</code>) · Windows 10 1809 이상 · 한국어</div>
+    <div><b>확인</b><code>makeappx</code> 매니페스트 검사 통과 · exe 실행(Direct3D 12, 예외 없음)</div>
+    <div><b>올리기 전 할 일</b>Partner Center 제품 ID로 <code>Store/store-config.json</code> 교체 (<a href="이슈기록.html#i25">#25</a>) · 로컬 설치는 서명 필요 (<a href="이슈기록.html#i26">#26</a>)</div>
+  </div>
+</section>
+
+<section>
   <h2>실행 방법</h2>
   <ol>
     <li>Unity Hub → <b>Add</b> → <code>D:\FoxGame\FoxGame</code> 선택 (Unity 6000.3.10f1)</li>
@@ -397,7 +416,8 @@
       <tr><td><code>86a29ed</code></td><td>이슈기록.html 추가 (상태 필터, 이슈 바로가기)</td></tr>
       <tr><td><code>d6150de</code></td><td>(gh-pages 브랜치) WebGL 빌드 용량 줄이기 (62.8MB → 37.5MB)</td></tr>
       <tr><td><code>aa43967</code></td><td>WebGL 용량 줄이기(폰트 서브셋 · LTO · 코드 제거), Codex CLI 그림 그리기(AGENTS.md, Art/), 이슈 #19~22</td></tr>
-      <tr><td>(이번 커밋)</td><td>CLAUDE.md 추가 (Claude Code용 프로젝트 지침)</td></tr>
+      <tr><td><code>747ee07</code></td><td>CLAUDE.md 추가 (Claude Code용 프로젝트 지침)</td></tr>
+      <tr><td>(이번 커밋)</td><td>Microsoft Store용 Windows 빌드: 아이콘, WindowsStoreBuild, MSIX 포장 스크립트, 이슈 #23~26</td></tr>
     </table>
   </div>
 </section>
@@ -442,7 +462,9 @@
 ├─ 이슈기록.md / .html    개발 중 이슈와 해결 기록
 ├─ AGENTS.md             Codex 등 에이전트용 안내 (그림 화풍 가이드)
 ├─ CLAUDE.md             Claude Code용 프로젝트 지침
-├─ Art\                  Codex가 그린 그림 (fox_keyart.png, app_icon.png), codex-draw.ps1
+├─ Art\                  Codex가 그린 그림 (fox_keyart.png, app_icon.png, app_icon_transparent.png),
+│                        codex-draw.ps1, make-icon-transparent.ps1
+├─ Store\                store-config.json, make-msix.ps1 (Microsoft Store MSIX 포장)
 ├─ Blender\
 │   ├─ voxel_utils.py    복셀 모델 공통 코드
 │   ├─ make_fox.py       여우 생성 스크립트
@@ -466,6 +488,7 @@
     ├─ Tools\             serve-webgl.ps1 (WebGL 로컬 서버)
     ├─ FontSource\        NotoSansKR-VF.ttf 원본 (빌드 제외, 서브셋의 재료)
     ├─ Builds\WebGL\      WebGL 빌드 결과 (Git 제외)
+    ├─ Builds\Windows\    Windows 빌드, Builds\Store\ MSIX (Git 제외)
     └─ Captures\          단계별 확인 캡처</pre>
 </section>
 

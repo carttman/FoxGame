@@ -48,6 +48,7 @@ Unity 에디터:
 | `개발계획서.md` / `.html` | 단계별 개발 계획과 진행 기록 |
 | `이슈기록.md` / `.html` | 개발 중 부딪힌 문제의 원인·해결·재발 방지 |
 | `Art/` | Codex CLI가 그린 게임 그림 (키 아트, 아이콘). 화풍 가이드는 `AGENTS.md` |
+| `Store/` | Microsoft Store MSIX 포장 스크립트와 패키지 설정 |
 
 ### 그림 그리기 (Codex CLI)
 
@@ -60,6 +61,17 @@ powershell -ExecutionPolicy Bypass -File Art/codex-draw.ps1 -Name title_bg -Prom
 옵션: `-Ref`(참고 캡처, 기본 `FoxGame/Captures/step5_start.png`), `-Size`(비율, 기본 `16:9`)
 
 ![Codex가 그린 키 아트](Art/fox_keyart.png)
+
+### Microsoft Store용 Windows 패키지 (MSIX)
+
+1. Unity 메뉴 **Tools > Fox > Windows 스토어 빌드** → `FoxGame/Builds/Windows/FoxGame.exe` (Codex가 그린 아이콘 포함)
+2. 저장소 루트에서 아래 명령 → `FoxGame/Builds/Store/*.msix` (Windows SDK 필요)
+
+```bash
+powershell -ExecutionPolicy Bypass -File Store/make-msix.ps1
+```
+
+스토어에 올리기 전에 `Store/store-config.json`의 패키지 ID·게시자 값을 Partner Center의 **제품 ID** 값으로 바꿔야 합니다 (지금은 임시값).
 
 ### 모델 다시 만들기
 
